@@ -2,7 +2,7 @@
 
 [![purescript-nonbili-postgres on Pursuit](https://pursuit.purescript.org/packages/purescript-nonbili-postgres/badge)](https://pursuit.purescript.org/packages/purescript-nonbili-postgres)
 
-Another purescript binding to [pg](https://www.npmjs.com/package/pg), called `node-postgres`.
+A nonbili purescript binding to [pg](https://www.npmjs.com/package/pg), called `node-postgres`.
 
 ## Example
 
