@@ -7,6 +7,13 @@ import Data.Argonaut.Encode (class EncodeJson, encodeJson)
 import Data.Array ((:))
 import Data.Tuple (Tuple(..))
 
+-- | Query params can be:
+-- |
+-- | - `unit` - no param
+-- | - `Array a` - an array of params with the same type
+-- | - `Tuple a b` - an array of params with different types
+-- |
+-- | All params are serialized to `Json` when sending through FFI.
 class ToQueryParams a where
   toQueryParams :: a -> Array Json
 

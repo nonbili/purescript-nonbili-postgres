@@ -2,6 +2,9 @@ module Nonbili.Postgres.Config where
 
 import Data.Maybe (Maybe(..))
 
+-- | All fields are optional. `pg` will fallback to `PGDATABASE`, `PGHOST`,
+-- | `PGUSER`, `PGPASSWORD` environement variables. See
+-- | https://node-postgres.com/features/connecting.
 type Config =
   { database :: Maybe String
   , host :: Maybe String
@@ -10,12 +13,13 @@ type Config =
   , password :: Maybe String
   , ssl :: Maybe Boolean
   , connectionString :: Maybe String
-  -- pool configs
+    -- pool configs
   , connectionTimeoutMillis :: Maybe Int
   , idleTimeoutMillis :: Maybe Int
   , max :: Maybe Int
   }
 
+-- | All fields are set to `Nothing`.
 defaultConfig :: Config
 defaultConfig =
   { database: Nothing

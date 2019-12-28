@@ -1,3 +1,5 @@
+-- | Bindings to [pg.Pool](https://node-postgres.com/api/pool).
+
 module Nonbili.Postgres.Pool
   ( Pool
   , Client
@@ -26,30 +28,41 @@ import Effect.Class (liftEffect)
 import Nonbili.Postgres.Class (class ToQueryParams, toQueryParams)
 import Nonbili.Postgres.Config (Config)
 
+-- | `pg.Pool` object.
 data Pool
 
+-- | Pooled client boject.
 data Client
 
 foreign import newPool_ :: Json -> Effect Pool
 
+-- | Create a new pool with configuration.
 newPool :: Config -> Effect Pool
 newPool = newPool_ <<< encodeJson
 
 foreign import connect_ :: Pool -> Effect (Promise Client)
 
+-- | Acquires a client from the pool. Remember to release the client after,
+-- | otherwise pool clients will be exhausted quickly. It's recommend to use
+-- | `withTransaction`, which handles releasing client for you.
 connect :: Pool -> Aff Client
 connect = Promise.toAffE <<< connect_
 
 foreign import end_ :: Pool -> Effect (Promise Unit)
 
+-- | Disconnect all active clients. Useful at the end of a script to exit the
+-- | process.
 end :: Pool -> Aff Unit
 end = Promise.toAffE <<< end_
 
 foreign import release_ :: Client -> Effect Unit
 
+-- | Releasing a client. When using `withTransaction`, no need to release
+-- | manually.
 release :: Client -> Aff Unit
 release = liftEffect <<< release_
 
+-- | Run queries as a transaction.
 withTransaction :: forall a. Pool -> (Client -> Aff a) -> Aff a
 withTransaction pool action = do
   client <- connect pool
@@ -64,6 +77,7 @@ withTransaction pool action = do
 
 foreign import query_ :: Client -> String -> Array Json -> Effect (Promise Json)
 
+-- | Same as `query`, but ignoring all return values.
 execute
   :: forall p
    . ToQueryParams p
@@ -71,11 +85,16 @@ execute
 execute client qs params = do
   void $ Promise.toAffE $ query_ client qs (toQueryParams params)
 
+-- | - `rows` - `decodeJson` is used to get `a`
+-- | - `rowCount` - number of rows processed by the last command
+-- | See https://node-postgres.com/api/result.
 type Result a = Either String
   { rows :: Array a
   , rowCount :: Int
   }
 
+-- | `pg` will construct SQL from provided query string and params. Check
+-- | `ToQueryParams` for supported params.
 query
   :: forall p a
    . ToQueryParams p
