@@ -42,7 +42,7 @@ newPool = newPool_ <<< encodeJson
 
 foreign import connect_ :: Pool -> Effect (Promise Client)
 
--- | Acquires a client from the pool. Remember to release the client after,
+-- | Acquire a client from the pool. Remember to release the client after,
 -- | otherwise pool clients will be exhausted quickly. It's recommend to use
 -- | `withTransaction`, which handles releasing client for you.
 connect :: Pool -> Aff Client
@@ -57,12 +57,12 @@ end = Promise.toAffE <<< end_
 
 foreign import release_ :: Client -> Effect Unit
 
--- | Releasing a client. When using `withTransaction`, no need to release
+-- | Release a client. When using `withTransaction`, no need to release
 -- | manually.
 release :: Client -> Aff Unit
 release = liftEffect <<< release_
 
--- | Run queries as a transaction.
+-- | Acquire a client from the pool, then run queries as a transaction.
 withTransaction :: forall a. Pool -> (Client -> Aff a) -> Aff a
 withTransaction pool action = do
   client <- connect pool
@@ -77,7 +77,7 @@ withTransaction pool action = do
 
 foreign import query_ :: Client -> String -> Array Json -> Effect (Promise Json)
 
--- | Same as `query`, but ignoring all return values.
+-- | Same as `query`, but ignore all return values.
 execute
   :: forall p
    . ToQueryParams p
