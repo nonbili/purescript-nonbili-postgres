@@ -2,7 +2,7 @@
 
 [![purescript-nonbili-postgres on Pursuit](https://pursuit.purescript.org/packages/purescript-nonbili-postgres/badge)](https://pursuit.purescript.org/packages/purescript-nonbili-postgres)
 
-A nonbili purescript binding to [pg](https://www.npmjs.com/package/pg), called `node-postgres`.
+A nonbili purescript binding to [pg](https://www.npmjs.com/package/pg), also called `node-postgres`.
 
 ## Example
 
@@ -28,13 +28,15 @@ In this example, I will create a `post` table, insert a record to it then query 
 
 ```purescript
 type Post =
-  { title :: String
+  { id :: Int
+  , title :: String
   , private :: Boolean
   }
 
 post1 :: Post
 post1 =
-  { title: "t1"
+  { id: 1
+  , title: "t1"
   , private: true
   }
 ```
@@ -63,7 +65,7 @@ main = do
         )
         """ unit
       Pg.execute client "INSERT INTO post VALUES ($1, $2, $3)"
-        (1 /\ post1.title /\ post1.private)
+        (post1.id /\ post1.title /\ post1.private)
 ```
 
 Let's take a look at the type signature of `query`
@@ -83,7 +85,7 @@ The second argument is a query string, with optional parameter holes to be fille
 `encodeJson` is used to convert params to `Json` before sending through FFI to `pg`.
 
 ```purescript
-      Pg.query client "SELECT * FROM post" unit >>= case _ of
+      Pg.query client "SELECT * FROM post WHERE id = $1" [post1.id] >>= case _ of
         Left err -> Aff.throwError $ Aff.error err
         Right res -> logShow $ res.rows == [post1]
     Pool.end pool

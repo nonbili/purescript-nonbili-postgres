@@ -13,13 +13,15 @@ import Nonbili.Postgres.Pool as Pool
 
 
 type Post =
-  { title :: String
+  { id :: Int
+  , title :: String
   , private :: Boolean
   }
 
 post1 :: Post
 post1 =
-  { title: "t1"
+  { id: 1
+  , title: "t1"
   , private: true
   }
 
@@ -40,10 +42,10 @@ main = do
         )
         """ unit
       Pg.execute client "INSERT INTO post VALUES ($1, $2, $3)"
-        (1 /\ post1.title /\ post1.private)
+        (post1.id /\ post1.title /\ post1.private)
 
 
-      Pg.query client "SELECT * FROM post" unit >>= case _ of
+      Pg.query client "SELECT * FROM post WHERE id = $1" [post1.id] >>= case _ of
         Left err -> Aff.throwError $ Aff.error err
         Right res -> logShow $ res.rows == [post1]
     Pool.end pool
