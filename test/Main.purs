@@ -19,7 +19,7 @@ type Post =
 
 main :: Effect Unit
 main = do
-  pool <- Pg.newPool Pg.defaultPoolConfig Pg.defaultConnectionConfig
+  pool <- Pg.newPool Pg.defaultConfig
   Aff.launchAff_ do
     Pg.withTransaction pool \client -> do
       Pg.execute client """

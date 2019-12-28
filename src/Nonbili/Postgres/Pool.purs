@@ -24,17 +24,16 @@ import Effect.Aff (Aff)
 import Effect.Aff as Aff
 import Effect.Class (liftEffect)
 import Nonbili.Postgres.Class (class ToQueryParams, toQueryParams)
-import Nonbili.Postgres.Config (ConnectionConfig, PoolConfig)
+import Nonbili.Postgres.Config (Config)
 
 data Pool
 
 data Client
 
-foreign import newPool_ :: Json -> Json -> Effect Pool
+foreign import newPool_ :: Json -> Effect Pool
 
-newPool :: PoolConfig -> ConnectionConfig -> Effect Pool
-newPool poolConfig connConfig =
-  newPool_ (encodeJson poolConfig) (encodeJson connConfig)
+newPool :: Config -> Effect Pool
+newPool = newPool_ <<< encodeJson
 
 foreign import connect_ :: Pool -> Effect (Promise Client)
 

@@ -1,7 +1,6 @@
 const Pool = require("pg").Pool;
 
-exports.newPool_ = poolConfig => connConfig => () =>
-  new Pool(Object.assign({}, poolConfig, connConfig));
+exports.newPool_ = config => () => new Pool(config);
 
 exports.connect_ = pool => () => pool.connect();
 

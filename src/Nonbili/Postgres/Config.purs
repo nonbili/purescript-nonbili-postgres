@@ -2,7 +2,7 @@ module Nonbili.Postgres.Config where
 
 import Data.Maybe (Maybe(..))
 
-type ConnectionConfig =
+type Config =
   { database :: Maybe String
   , host :: Maybe String
   , port :: Maybe Int
@@ -10,10 +10,14 @@ type ConnectionConfig =
   , password :: Maybe String
   , ssl :: Maybe Boolean
   , connectionString :: Maybe String
+  -- pool configs
+  , connectionTimeoutMillis :: Maybe Int
+  , idleTimeoutMillis :: Maybe Int
+  , max :: Maybe Int
   }
 
-defaultConnectionConfig :: ConnectionConfig
-defaultConnectionConfig =
+defaultConfig :: Config
+defaultConfig =
   { database: Nothing
   , host: Nothing
   , port: Nothing
@@ -21,17 +25,7 @@ defaultConnectionConfig =
   , password: Nothing
   , ssl: Nothing
   , connectionString: Nothing
-  }
-
-type PoolConfig =
-  { connectionTimeoutMillis :: Maybe Int
-  , idleTimeoutMillis :: Maybe Int
-  , max :: Maybe Int
-  }
-
-defaultPoolConfig :: PoolConfig
-defaultPoolConfig =
-  { connectionTimeoutMillis: Nothing
+  , connectionTimeoutMillis: Nothing
   , idleTimeoutMillis: Nothing
   , max: Nothing
   }
