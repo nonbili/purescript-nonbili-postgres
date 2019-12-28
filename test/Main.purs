@@ -2,7 +2,6 @@ module Test.Main where
 
 import Prelude
 
-import Data.Either (Either)
 import Data.Tuple.Nested ((/\))
 import Effect (Effect)
 import Effect.Aff as Aff
@@ -33,7 +32,7 @@ main = do
         """ unit
       Pg.execute client "INSERT INTO post VALUES ($1, $2, $3)"
         (1 /\ "t1" /\ true)
-      (res :: Either String (Array Post)) <-
+      (res :: Pg.Result Post) <-
         Pg.query client "select * from post" unit
       logShow res
     Pool.end pool

@@ -12,5 +12,8 @@ exports.release_ = client => () => client.release();
 exports.query_ = client => qs => params =>
   async function() {
     const res = await client.query(qs, params);
-    return res.rows;
+    return {
+      rows: res.rows,
+      rowCount: res.rowCount
+    };
   };

@@ -7,6 +7,7 @@ module Nonbili.Postgres.Pool
   , release
   , withTransaction
   , execute
+  , Result
   , query
   ) where
 
@@ -71,11 +72,16 @@ execute
 execute client qs params = do
   void $ Promise.toAffE $ query_ client qs (toQueryParams params)
 
+type Result a = Either String
+  { rows :: Array a
+  , rowCount :: Int
+  }
+
 query
   :: forall p a
    . ToQueryParams p
   => DecodeJson a
-  => Client -> String -> p -> Aff (Either String a)
+  => Client -> String -> p -> Aff (Result a)
 query client qs params = do
   res <- Promise.toAffE $ query_ client qs (toQueryParams params)
   pure $ decodeJson res

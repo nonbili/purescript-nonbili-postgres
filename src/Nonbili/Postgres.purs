@@ -6,4 +6,4 @@ module Nonbili.Postgres
 
 import Nonbili.Postgres.Class (class ToQueryParams)
 import Nonbili.Postgres.Config (ConnectionConfig, PoolConfig, defaultConnectionConfig, defaultPoolConfig)
-import Nonbili.Postgres.Pool (Pool, Client, newPool, withTransaction, execute, query)
+import Nonbili.Postgres.Pool (Client, Pool, Result, execute, newPool, query, withTransaction)
