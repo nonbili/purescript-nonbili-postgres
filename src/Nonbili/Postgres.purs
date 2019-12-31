@@ -7,7 +7,7 @@
 -- |     Pg.withTransaction pool \client -> do
 -- |       (res :: Pg.Result { title :: String }) <-
 -- |         Pg.query client "select * from post" unit
--- |         logShow res
+-- |       logShow res
 -- | ```
 
 module Nonbili.Postgres

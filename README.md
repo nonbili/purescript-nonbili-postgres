@@ -4,6 +4,8 @@
 
 A nonbili purescript binding to [pg](https://www.npmjs.com/package/pg), also called `node-postgres`.
 
+Different from other pg bindings on Pursuit, this library returns record directly from `query` function.
+
 ## Example
 
 `test/Main.purs` is generated from this README by `codegen.sh`.
@@ -80,7 +82,7 @@ The second argument is a query string, with optional parameter holes to be fille
 - array of arguments with the same type: `[a]`
 - array of arguments with different types: `a /\ b /\ c /\ d`
 
-`/\` is from [Data.Tuple.Nested](https://pursuit.purescript.org/packages/purescript-tuples/docs/Data.Tuple.Nested#v:(/\)) module.
+`/\` is from [Data.Tuple.Nested](https://pursuit.purescript.org/packages/purescript-tuples/docs/Data.Tuple.Nested) module.
 
 `encodeJson` is used to convert params to `Json` before sending through FFI to `pg`.
 
