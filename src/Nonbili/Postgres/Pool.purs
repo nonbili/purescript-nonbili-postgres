@@ -31,7 +31,7 @@ import Nonbili.Postgres.Config (Config)
 -- | `pg.Pool` object.
 data Pool
 
--- | Pooled client boject.
+-- | Pooled client object.
 data Client
 
 foreign import newPool_ :: Json -> Effect Pool
