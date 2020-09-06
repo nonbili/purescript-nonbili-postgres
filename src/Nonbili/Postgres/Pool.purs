@@ -18,8 +18,9 @@ import Prelude
 import Control.Promise (Promise)
 import Control.Promise as Promise
 import Data.Argonaut.Core (Json)
-import Data.Argonaut.Decode (class DecodeJson, decodeJson)
+import Data.Argonaut.Decode (class DecodeJson, decodeJson, printJsonDecodeError)
 import Data.Argonaut.Encode (encodeJson)
+import Data.Bifunctor (lmap)
 import Data.Either (Either)
 import Effect (Effect)
 import Effect.Aff (Aff)
@@ -102,4 +103,4 @@ query
   => Client -> String -> p -> Aff (Result a)
 query client qs params = do
   res <- Promise.toAffE $ query_ client qs (toQueryParams params)
-  pure $ decodeJson res
+  pure $ (lmap printJsonDecodeError <<< decodeJson) res
